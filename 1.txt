@@ -1,0 +1,393 @@
+p1
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+Importing the dataset
+dataset = pd.read_csv('Salary_Data.csv')
+x = dataset.iloc[:, :-1].values
+y = dataset.iloc[:, -1].values
+print(x)
+print(y)
+from sklearn.model_selection import train_test_split
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 1/3,
+random_state = 0)
+print(x_train)
+print(x_test)
+print(y_train)
+print(y_test)
+from sklearn.linear_model import LinearRegression
+regressor = LinearRegression()
+regressor.fit(x_train, y_train)
+y_pred = regressor.predict(x_test)
+plt.scatter(x_train, y_train, color = 'red')
+plt.plot(x_train, regressor.predict(x_train), color = 'blue')
+plt.title('Salary VS Exprience (Training set)')
+plt.xlabel('Years of Exprience')
+plt.ylabel('Salary')
+plt.show()
+
+p2
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+dataset = pd.read_csv('50_Startups-2.csv')
+X = dataset.iloc[:, :-1].values
+y = dataset.iloc[:, -1].values
+print(X)
+print(y)
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder
+ct = ColumnTransformer(transformers=[('encoder', OneHotEncoder(), [3])],
+remainder = 'passthrough')
+X = np.array(ct.fit_transform(X))
+print(X)
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2,
+random_state=0)
+from sklearn.linear_model import LinearRegression
+regressor = LinearRegression()
+regressor.fit(X_train, y_train)
+y_pred = regressor.predict(X_test)
+np.set_printoptions(precision=2)
+print(np.concatenate((y_pred.reshape(len(y_pred),1),y_test.reshape(len(y_test),1)),1))
+
+p3
+import pandas as pd
+iris_data = pd.read_csv('iris.csv')
+iris_data.head()
+iris_data.info()
+from sklearn.preprocessing import LabelEncoder
+encoder = LabelEncoder()
+iris_data['Species'] = encoder.fit_transform(iris_data['Species'])
+import matplotlib.pyplot as plt
+plt.pie(iris_data['Species'].value_counts(),labels =
+['Setosa','versicolor','virginica'],autopct='%0.2f')
+plt.show()
+x = iris_data.drop('Species', axis = 1)
+y = iris_data['Species']
+x
+y
+from sklearn.model_selection import train_test_split
+x_train, x_test, y_train, y_test =
+train_test_split(x,y,test_size=0.2,random_state=2)
+from sklearn.linear_model import LogisticRegression
+model = LogisticRegression(max_iter = 1000)
+model.fit(x_train, y_train)
+LogisticRegression(max_iter=1000)
+pred_train = model.predict(x_train)
+from sklearn.metrics import confusion_matrix,accuracy_score
+accuracy_score(y_train,pred_train)
+pred_test = model.predict(x_test)
+accuracy_score(y_test,pred_test)
+confusion_matrix(y_test,pred_test)
+
+p4
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+dataset = pd.read_csv('Social_Network_Ads.csv')x = dataset.iloc[:,:-1].values
+y= dataset.iloc[:,-1].values
+from sklearn.model_selection import train_test_split
+X_train, X_test,y_train,y_test = train_test_split(x,y, test_size = 0.5,
+random_state=0)
+print(X_train)
+print(y_train)
+from sklearn.preprocessing import StandardScaler
+sc=StandardScaler()
+X_train = sc.fit_transform(X_train)
+X_test = sc.transform(X_test)
+print(X_train)
+from sklearn.svm import SVC
+classifier = SVC(kernel = 'linear', random_state = 0)
+classifier.fit(X_train, y_train)
+y_pred = classifier.predict(X_test)
+print(np.concatenate((y_pred.reshape(len(y_pred),1),y_test.reshape(len(y_test),1)),1))
+
+p5
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+dataset = pd.read_csv('Social_Network_Ads.csv')
+X = dataset.iloc[:, :-1].valuesy = dataset.iloc[:, -1].values
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25,
+random_state = 0)
+print(X_train)
+print(X_test)
+print(y_train)
+print(y_test)
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
+X_train = sc.fit_transform(X_train)
+X_test = sc.transform(X_test)
+print(X_train)
+print(X_test)
+from sklearn.neighbors import KNeighborsClassifier
+classifier = KNeighborsClassifier(n_neighbors = 5, metric = 'minkowski', p = 2)
+classifier.fit(X_train, y_train)
+y_pred = classifier.predict(X_test)
+print(np.concatenate((y_pred.reshape(len(y_pred), 1), y_test.reshape(len(y_test),1)), 1))
+from sklearn.metrics import confusion_matrix, accuracy_score
+cm = confusion_matrix(y_test, y_pred)
+print(cm)
+accuracy_score(y_test, y_pred)
+
+p6
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+dataset = pd.read_csv('Social_Network_Ads.csv')
+X = dataset.iloc[:, :-1].values
+y = dataset.iloc[:, -1].values
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25,
+random_state = 0)
+print(X_train)
+print(X_test)
+print(y_train)
+print(y_test)
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
+X_train = sc.fit_transform(X_train)X_test = sc.transform(X_test)
+print(X_train)
+print(X_test)
+from sklearn.naive_bayes import GaussianNB
+classifier = GaussianNB()
+classifier.fit(X_train, y_train)
+y_pred = classifier.predict(X_test)
+print(np.concatenate((y_pred.reshape(len(y_pred),1),y_test.reshape(len(y_test),1)),1))
+from sklearn.metrics import confusion_matrix, accuracy_score
+cm = confusion_matrix(y_test, y_pred)
+print(cm)
+accuracy_score(y_test, y_pred)
+
+p7
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+dataset = pd.read_csv('Social_Network_Ads.csv')
+x = dataset.iloc[:, :-1].values
+y = dataset.iloc[:, -1].values
+from sklearn.model_selection import train_test_splitx_train, x_test, y_train, y_test = train_test_split(x,y,test_size = 0.25,
+random_state = 0)
+print(x_train)
+print(x_test)
+print(y_train)
+print(y_test)
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
+x_train = sc.fit_transform(x_train)
+x_test = sc.transform(x_test)
+print(x_train)
+print(x_test)
+print(y_train)
+print(y_test)
+from sklearn.tree import DecisionTreeClassifier
+classifier = DecisionTreeClassifier()
+classifier.fit(x_train, y_train)
+DecisionTreeClassifier()
+y_pred = classifier.predict(x_test)
+print(np.concatenate((y_pred.reshape(len(y_pred),1),y_test.reshape(len(y_test),1)),1))
+from sklearn.metrics import confusion_matrix, accuracy_scorecm = confusion_matrix(y_test, y_pred)
+print(cm)
+accuracy_score(y_test, y_pred)
+
+p8
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+dataset = pd.read_csv('Mall_customers.csv')
+x = dataset.iloc[:, [3,4]].values
+print(x)
+from sklearn.cluster import KMeans
+wcss = []
+for i in range(1,11):
+kmeans = KMeans(n_clusters = i, init = 'k-means++', random_state = 42)
+kmeans.fit(x)
+wcss.append(kmeans.inertia_)
+plt.plot(range(1,11), wcss)
+plt.title('The Elbow Method')
+plt.xlabel('Number of clusters')
+plt.ylabel('WCSS')
+plt.show()
+from sklearn.cluster import KMeans
+kmeans = KMeans(n_clusters = 5, init = 'k-means++', random_state= 42)
+y_kmeans = kmeans.fit_predict(x)
+print(y_kmeans)
+plt.scatter(x[y_kmeans == 0, 0], x[y_kmeans == 0, 1], s = 100, c = 'red',label =
+'Cluster 1')
+plt.scatter(x[y_kmeans == 1, 0], x[y_kmeans == 1, 1], s = 100, c = 'blue',label =
+'Cluster 2')
+plt.scatter(x[y_kmeans == 2, 0], x[y_kmeans == 2, 1], s = 100, c = 'green',label =
+'Cluster 3')
+plt.scatter(x[y_kmeans == 3, 0], x[y_kmeans == 3, 1], s = 100, c = 'cyan',label =
+'Cluster 4')plt.scatter(x[y_kmeans == 4, 0], x[y_kmeans == 4, 1], s = 100, c = 'magenta',label =
+'Cluster 5')
+plt.scatter(kmeans.cluster_centers_[:, 0], kmeans.cluster_centers_[:, 1], s =
+300, c = 'yellow', label = 'Centroids')
+plt.title('Clusters of customers')
+plt.xlabel('Annual Income (k$)')
+plt.ylabel('Spending Score (1-100)')
+plt.legend()
+plt.show()
+
+p9
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+dataset = pd.read_csv('Mall_Customers.csv')
+x = dataset.iloc[:, [3,4]].values
+print(x)
+from sklearn.cluster import AgglomerativeClusteringhc = AgglomerativeClustering(n_clusters = 5, metric='euclidean', linkage = 'ward')
+y_hc = hc.fit_predict(x)
+y_hc
+print(y_hc)
+plt.scatter(x[y_hc == 0, 0], x[y_hc == 0, 1],s = 100, c='red', label = 'Cluster 1')
+plt.scatter(x[y_hc == 1, 0], x[y_hc == 1, 1],s = 100, c='blue', label = 'Cluster 2')
+plt.scatter(x[y_hc == 2, 0], x[y_hc == 2, 1],s = 100, c='green', label = 'Cluster 3')
+plt.scatter(x[y_hc == 3, 0], x[y_hc == 3, 1],s = 100, c='pink', label = 'Cluster 4')plt.scatter(x[y_hc == 4, 0], x[y_hc == 4, 1],s = 100, c='magenta', label = 'Cluster 5')
+plt.title('Clusters of customers')
+plt.xlabel('Annual Income (k$)')
+plt.ylabel('Spending score(1-100)')
+plt.legend()
+plt.show()
+
+p10
+import numpy as np
+import matplotlib.pyplot as plt
+plt.style.use('seaborn')
+plt.figure(figsize=(8,4))
+def SigmoidBinary(t):
+return 1/(1+np.exp(-t))
+t = np.linspace(-5,5)plt.plot(t,SigmoidBinary(t))
+plt.title("Binary Activation Function")
+plt.show()
+plt.style.use('seaborn')
+plt.figure(figsize=(8,4))
+def HyperbolicTan(t):
+return np.tanh(t)
+t = np.linspace(-5,5)
+plt.plot(t, HyperbolicTan(t))
+plt.title('Hyperbolic Tan Activation Function')
+plt.show()
+plt.style.use('seaborn')
+plt.figure(figsize=(8,4))
+def RectifieldLinearUnit(t):
+lst = []
+for i in t:
+if i>=0:
+lst.append(1)
+else:
+lst.append(0)
+return lst
+arr = np.linspace(-5,5)
+plt.plot(arr,RectifieldLinearUnit(arr))
+plt.title('Rectified Linear Unit Activation Function')
+plt.show()
+plt.style.use('seaborn')
+plt.figure(figsize=(8,4))
+def binaryStep(x):
+lst=[]
+for i in t:
+if i>=0:
+lst.append(1)
+else:
+lst.append(0)
+return lst
+x = np.linspace(-10,10)
+plt.plot(x,binaryStep(x))
+plt.axis('tight')
+plt.title('Activation Function: BinaryStep')
+plt.show()
+def linear(x):
+'''y=f(x) It return the input as it is'''
+return x
+x = np.linspace(-10,10)
+plt.plot(x,linear(x))
+plt.axis('tight')
+plt.title('Linear Activation Function')
+plt.show()
+plt.style.use('seaborn')
+plt.figure(figsize=(8,4))
+def softmax(t):
+return np.exp(t) / np.sum(np.exp(t))
+t = np.linspace(-5,5)
+plt.plot(t,softmax(t))
+plt.title('Softmax Activation Function')
+plt.show()
+
+p11
+import numpy as np
+import tensorflow as tf
+print(tf.__version__)
+tensor_id = np.array([1.3,1,4.0,23.99])
+print(tensor_id)
+print(tensor_id[0])
+print(tensor_id[2])
+tensor_2d = np.array([(1,2,3,4),(4,5,6,7),(8,9,10,11),(12,13,14,15)])
+print(tensor_2d)
+tensor_2d[2][3]
+matrix1 = np.array([(2,2,2),(2,2,2),(2,2,2)],dtype='int32')
+matrix2 = np.array([(1,1,1),(1,1,1),(1,1,1)],dtype='int32')
+print(matrix1)
+print(matrix2)
+matrix1 = tf.constant(matrix1)
+matrix2 = tf.constant(matrix2)
+matrix_product = tf.matmul(matrix1, matrix2)
+print('Product: ',matrix_product)
+matrix_sum = tf.add(matrix1, matrix2)
+print('Sum: ',matrix_sum)
+matrix_sub = tf.math.subtract(matrix1, matrix2)
+print('Sub: ',matrix_sub)
+matrix_div = tf.math.divide(matrix1, matrix2)
+print('Div: ',matrix_div)
+matrix3 = np.array([(2,7,2),(1,4,2),(9,0,2)],dtype = 'float32')
+print('Matrix 3: ',matrix3)
+a=(9)
+b=(10)
+print('a :',a)
+print('b :',b)
+res = tf.math.less(x=a, y=b)
+print('Result :',res)
+
+p12
+import numpy as np
+import pandas as pd
+import tensorflow as tf
+tf.__version__
+dataset = pd.read_csv('Churn_Modelling.csv')
+x = dataset.iloc[:,3:-1].values
+y = dataset.iloc[:,-1].values
+print(x)
+print(y)
+from sklearn.preprocessing import LabelEncoder
+le = LabelEncoder()
+x[:,2]=le.fit_transform(x[:,2])
+print(x)
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder
+ct =ColumnTransformer(transformers=[('encoder',OneHotEncoder(),[1])],remainder='passthrough')
+x = np.array(ct.fit_transform(x))
+print(x)
+from sklearn.model_selection import train_test_split
+x_train, x_test, y_train, y_test =
+train_test_split(x,y,test_size=0.7,random_state=0)
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
+x_train = sc.fit_transform(x_train)
+x_test = sc.transform(x_test)
+print(x_train)
+print(x_test)
+ann = tf.keras.models.Sequential() #building ann
+ann.add(tf.keras.layers.Dense(units=6, activation='relu')) #input layer
+ann.add(tf.keras.layers.Dense(units=6, activation='relu')) #hiddenlayer
+ann.add(tf.keras.layers.Dense(units=1, activation='sigmoid')) #output layer
+ann.compile(optimizer='adam', loss = 'binary_crossentropy', metrics=['accuracy'])
+ann.fit(x_train, y_train,batch_size=32, epochs=100)
+y_pred = ann.predict(x_test)
+y_pred = (y_pred > 0.5)
+print(np.concatenate((y_pred.reshape(len(y_pred),1),y_test.reshape(len(y_test),1)),1))
+from sklearn.metrics import confusion_matrix, accuracy_score
+cm = confusion_matrix(y_test, y_pred)
+print(cm)
+accuracy_score(y_test,y_pred)
