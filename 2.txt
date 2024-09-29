@@ -1,0 +1,485 @@
+p1
+import pandas as pd
+my_dict = {
+'Name': ["a", "b", "c", "d", "e", "f", "g"],
+'age': [20, 27, 35, 45, 55, 43, 35],
+'designation': ["VP", "CEO", "CFO", "VP", "VP", "CEO", "MD"]
+}
+df = pd.DataFrame(my_dict)
+df
+df.to_csv('Csv_example.csv')
+df
+df_csv = pd.read_csv('Csv_example.csv')
+df_csv
+df.to_csv('CSV_Ex.csv', index=False)
+df_csv_no_index = pd.read_csv('CSV_Ex.csv')
+df_csv_no_index
+import pandas as pd
+Location = "student-mat.csv"
+df = pd.read_csv(Location, header=None)
+df.head()
+df = pd.read_csv(Location)
+df.head()
+df = pd.read_csv(Location, names=['RollNo', 'Names', 'Grades'])
+df.columns = ['RollNo', 'Names', 'Grades']
+df.head()
+import pandas as pd
+names = ['Bob', 'Jessica', 'Mary', 'John', 'Mel', 'Dipesh']
+grades = [76, 95, 77, 78, 99, 100]
+bsdegrees = [1, 1, 0, 0, 1, 1] # 1 indicates having a BS degree, 0 indicates not having it
+msdegrees = [2, 1, 0, 0, 0, 2] # 2 indicates having an MS degree, 0 indicates not having it
+phddegrees = [0, 1, 0, 0, 0, 1] # 1 indicates having a PhD, 0 indicates not having it
+Degrees = zip(names, grades, bsdegrees, msdegrees, phddegrees)
+columns = ['Names', 'Grades', 'BS', 'MS', 'PhD']
+df = pd.DataFrame(data=Degrees, columns=columns)
+df
+import pandas as pd
+Location = "gradedata.xlsx"
+df = pd.read_excel(Location)
+df.columns = ['first', 'last', 'sex', 'age', 'exer', 'hrs', 'grd', 'addr']
+df.head()
+import pandas as pd
+names = ['bob', 'Jessica', 'Mary', 'John', 'Mel', 'Dipesh']
+grades = [76, 95, 77, 78, 99, 100]
+GradeList = zip(names, grades)
+df = pd.DataFrame(data=GradeList, columns=['Names', 'Grades'])
+writer = pd.ExcelWriter('dataframe.xlsx', engine='xlsxwriter')
+df.to_excel(writer, sheet_name='Sheet1')
+writer.save()
+import sqlite3
+con = sqlite3.connect("portal_mammals.sqlite")
+cur = con.cursor()
+for row in cur.execute('SELECT * FROM species;'):
+print(row) 
+con.close()
+import sqlite3
+con = sqlite3.connect("portal_mammals.sqlite")
+cur = con.cursor()
+cur.execute('SELECT plot_id FROM plots WHERE plot_type="Control"')
+print(cur.fetchall()) # Fetching and printing all matching records
+cur.execute('SELECT species FROM species WHERE taxa="Bird"')
+print(cur.fetchone()) # Fetching and printing the first matching record
+con.close()
+import pandas as pd
+import sqlite3
+con = sqlite3.connect("portal_mammals.sqlite")
+DataFrame
+df = pd.read_sql_query("SELECT * FROM surveys", con)
+print(df.head())
+con.close()
+from pandas import DataFrame
+Cars = {
+'Brand': ['Honda Civic', 'Toyota Innova', 'Land Rover Defender', 'Audi A4'],
+'Price': [22000, 25000, 27000, 29000]
+}
+df = DataFrame(Cars, columns=['Brand', 'Price'])
+print(df)
+import sqlite3
+conn = sqlite3.connect('TestDB.db')
+c = conn.cursor()
+c.execute('CREATE TABLE CARS_2(Brand text, Price number)')
+conn.commit() # Committing the transaction to save changes
+df.to_sql('CARS2', conn, if_exists='replace', index=False)
+c.execute('''
+SELECT BRAND, max(Price) FROM CARS2
+''')
+df = DataFrame(c.fetchall(), columns=['Brand', 'Price'])
+print(df) 
+import pandas as pd
+import os
+from sqlalchemy import create_engine
+studentId = ["rj101", "rj150", "rj137", "rj170"]
+SName = ["Saurabh", "Dipesh", "Prajwal", "Radha"]
+LName = ["Chavan", "Parab", "Wanjari", "Rai"]
+Department = ["Bms", "BscIT", "BscCS", "Bcom"]
+Email = ["saurabh01@gmail.com", "dipesh3@gmail.com", "prajwal04@gmail.com",
+"radha03@gmail.com"]
+studata = zip(studentId, SName, LName, Department, Email)
+df = pd.DataFrame(data=studata, columns=['studentId', 'Sname', 'LNname', 'Department', 'Email'])
+df
+df.to_csv('studentdata2.csv', index=False, header=True)
+df.to_excel('studentdata2.xlsx', index=False, header=True)
+db_filename = r'studentdata2.db'
+con = lite.connect(db_filename)
+df.to_sql('student', con, schema=None, if_exists='replace', index=True, index_label=None,
+chunksize=None, dtype=None)
+con.close() # Closing the connection to the database
+db_file = r'studentdata.db'
+engine = create_engine(r"sqlite:///{}".format(db_filename))
+sql = 'SELECT * FROM student'
+studf = pd.read_sql(sql, engine)
+studf
+sql = "SELECT * FROM student WHERE studentId='rj101'"
+studf = pd.read_sql(sql, engine)
+studf
+
+p2
+import pandas as pd
+import numpy as np
+state = pd.read_csv("US_violent_crime.csv")
+state.head()
+state.tail()
+state.size
+def some_func(x):
+return x * 2
+state.apply(some_func)
+state.apply(lambda n: n * 2)
+state.transform(func=lambda x: x * 10)
+state.Murder.transform(func=lambda x: x * 10)
+mean_purchase = state.groupby('State')["Murder"].mean().rename("User_Mean").reset_index()
+print(mean_purchase)
+mer = state.merge(mean_purchase)
+mer
+print(state.isnull().sum())
+import pandas as pd
+import numpy as np # Corrected import alias from 'py' to 'np'
+cols = ['col0', 'col1', 'col2', 'col3', 'col4']
+rows = ['row0', 'row1', 'row2', 'row3', 'row4']
+data = np.random.randint(0, 1000, size=(5, 5))
+df = pd.DataFrame(data, columns=cols, index=rows)
+df.head()
+value = df.iloc[4, 2]
+print(value)
+df.iloc[3, 3] = 0
+df.iloc[1, 2] = np.nan
+df.iloc[4, 0] = np.nan
+df['col5'] = 0df['col6'] = np.nan
+df.head()
+df.loc[:,df.all()]
+df.loc[:,df.any()]
+df.loc[:, df.notnull().all()]
+df.loc[:, df.isnull().all()]
+df.loc[:, df.isnull().any()]
+df.loc[:, df.notnull().any()]
+df.dropna(how='all', axis=0)
+df.dropna(how='all', axis=1)
+df.fillna(df.sum())
+import pandas as pd
+import numpy as np
+import random
+data = pd.DataFrame({
+'C' : [random.choice(('a', 'b', 'c')) for i in range (1000)],
+'B' : [random.randint(1, 10) for i in range (1000)],
+'A' : [random.randint(1, 10) for i in range (1000)]
+})
+Data
+mean = data.groupby('C')["A"].mean().rename("D").reset_index()
+mean
+df_1 = data.merge(mean)
+df_1
+
+p3
+import matplotlib.pyplot as plt
+fig, ax = plt.subplots()
+x = [2, 4, 6, 6, 2, 7, 2, 6, 1, 8, 4, 5, 9, 1, 2, 3, 7, 5, 8, 1, 3]
+y = [7, 8, 4, 6, 4, 9, 5, 9, 3, 6, 7, 2, 6, 7, 6, 7, 1, 9, 2, 1, 5]
+ax.scatter(x,y)
+import pandas as pd
+cars_data = pd.read_csv('Toyota.csv', index_col = 0)
+cars_data.head()
+import matplotlib.pyplot as plt
+plt.scatter(cars_data['Age'], cars_data["Price"], c = 'blue')
+plt.show()
+import pandas as pd
+import numpy as np
+from matplotlib import pyplot as plt
+x = range(1, 6)
+y = np.random.randint(1, 20, 5)
+plt.plot(x,y)
+plt.xticks(x)
+plt.yticks(y)import matp
+import matplotlib.pyplot as plt
+fig, ax = plt.subplots()
+x = [2, 4, 5, 6, 7, 8, 9, 1, 2, 5, 4, 5, 6, 4, 2]
+y = [3, 5, 6, 7, 5, 4, 6, 2, 4, 6, 4, 2, 7, 8, 9]
+ax.plot(x, y)
+import pandas as pd
+df = pd.DataFrame({
+'name' : ['john', 'peter', 'jeff', 'bill', 'lisa', 'jose'],
+'age' : [23, 22, 19, 45, 33, 20],
+'gender' : ['M', 'F', 'M', 'M', 'F', 'M'],
+'sate' : ['uk', 'dc', 'gabba', 'melborne', 'sydney', 'lord'],
+'num_children' : [2, 0, 3, 2, 1, 1],
+'num_pets' : [5, 1, 4, 1, 2, 3]})
+ax = plt.gca()
+df.plot(kind = 'line', x = 'name', y = 'num_children', ax = ax)
+df.plot(kind = 'line', x = 'name', y = 'num_pets', color = 'red', ax = ax)
+wine_reviews = pd.read_csv('winemag-data-130k-v2.csv', index_col = 0)
+wine_reviews.head()
+fig, ax = plt.subplots()
+data = wine_reviews['points'].value_counts()
+points = data.index
+frequency = data.values
+ax.bar(points, frequency)
+ax.set_title('wine Review Scores')
+ax.set_xlabel('Points')
+ax.set_ylabel('Frequency')
+wine_reviews['points'].value_counts().sort_index().plot.bar()
+wine_reviews.groupby("country").price.mean().sort_values(ascending = False)[:5].plot.bar()
+wine_reviews['points'].value_counts().sort_index().plot.barh()
+import pandas as pd
+df = pd.DataFrame({
+'name' : ['john', 'peter', 'jeff', 'bill', 'lisa', 'jose'],
+'age' : [23, 22, 19, 45, 33, 20],
+'gender' : ['M', 'F', 'M', 'M', 'F', 'M'],
+'state' : ['uk', 'dc', 'gabba', 'dc', 'sydney', 'lord'],
+'num_children' : [2, 0, 3, 2, 1, 1],
+'num_pets' : [5, 1, 4, 1, 2, 3]
+})
+df.groupby(['state', 'gender']).size().unstack().plot(kind = 'bar', stacked = True)
+from pandas import DataFrameimport matplotlib.pyplot as plt
+Data = {'Tasks': [300, 500, 700],
+'Task Type': ['Tasks Pending','Tasks Ongoing','Tasks Completed']}
+df = DataFrame(Data)
+df.set_index('Task Type', inplace = True)
+df.plot.pie(y = 'Tasks' , figsize = (7, 7), autopct = '%1.1f%%', startangle = 90)
+import matplotlib.pyplot as plt
+%matplotlib inline
+labels = ['Civil', 'Electrical', 'Mechanical', 'Chemical']
+sizes = [15, 50, 45, 10]
+ax.pie(sizes, labels=labels, autopct='%1.1f%%')
+ax.axis('equal')
+ax.set_title('Engineering Disciplines')
+plt.show()
+from pandas import DataFrame
+import matplotlib.pyplot as plt
+Data = {
+'Tasks': [300, 500, 700],
+'Task Type': ['Task Pending', 'Task Ongoing', 'Task Completed']
+}
+df = DataFrame(Data)
+df.set_index('Task Type', inplace=True)
+df.plot.pie(y='Tasks', figsize=(10, 10), autopct='%1.1f%%', startangle=90)# Show the plot
+plt.show()
+import matplotlib.pyplot as plt
+%matplotlib inline
+labels = ['Civil', 'Electrical', 'Mechanical', 'Chemical']
+sizes = [15, 50, 45, 10]
+explode = (0.1, 0.1, 0.1, 0.4) # Explode the last slice (Chemical) more
+fig, ax = plt.subplots()
+ax.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%', shadow=True, startangle=90)
+ax.axis('equal')# Set the title of the pie chart
+ax.set_title('Engineering Disciplines')
+plt.show()
+import numpy as np
+import matplotlib.pyplot as plt
+# Set the figure size for the entire plot
+plt.figure(figsize=(20, 10))
+plt.subplot(2, 2, 1)
+plt.bar(range(1, 6), np.random.randint(1, 20, 5)) # Create a bar chart with random values
+plt.title("2,2,1") # Set the title for the subplot
+plt.subplot(2, 2, 2)
+plt.bar(range(1, 6), np.random.randint(1, 20, 5)) # Create another bar chart with random values
+plt.title("2,2,2") # Set the title for the subplot
+plt.subplot(2, 2, 3)
+plt.scatter(range(1, 6), np.random.randint(1, 20, 5), s=100, color="r") # Create a scatter plot
+plt.title("2,2,3") # Set the title for the subplot# Create the fourth subplot (2 rows, 2 columns, position 4)
+plt.subplot(2, 2, 4)
+plt.plot(range(1, 6), np.random.randint(1, 20, 5), marker='o', color='g', linestyle="--") # Create a
+line plot
+plt.title("2,2,4") # Set the title for the subplot
+plt.tight_layout() 
+plt.show()
+import numpy as np
+import matplotlib.pyplot as plt
+plt.bar(range(1, 6), np.random.randint(1, 20, 5), width=0.5) # Set bar width to 0.5
+# Create a scatter plot on the same axes
+plt.scatter(range(1, 6), np.random.randint(1, 20, 5), s=200, color="r") # Red markers with size 200
+plt.plot(range(1, 6), np.random.randint(1, 20, 5), marker='o', color='g', linestyle='--') # Green
+dashed line with circular markers
+plt.title("Combined Bar, Scatter, and Line Plot")
+plt.xlabel("X-axis")
+plt.ylabel("Y-axis")
+plt.show()
+
+p4
+ns = 6
+na = 1
+pa = na / ns
+print("Probability of getting 3 is:", pa)
+ns = 8 # n(S) = {HHH, HHT, HTH, THH, TTH, THT, HTT, TTT}
+na = 7 # n(A) = {HHH, HHT, HTH, THH, TTH, THT, HTT}
+pa = na / ns # P(A)
+print("Probability of getting at least one head is:", pa)
+ns = 10
+na = 7
+pa = na / ns
+print("Probability that the jelly bean is not blue: ", pa)
+P_A = 0.7
+P_B = 0.5
+P_both_alive = P_A * P_B
+print("Probability that both A and B will be alive after 20 years is: ", P_both_alive)
+def event_probability(n,s):
+return n/s
+pa = event_probability(2,6)
+pb = event_probability(3,6)
+P = pa*pb
+print ("probability of getting a 4 or 5 on the first toss and a 1,2 or 3 in the second toss is: ", P))
+pw = event_probability(5,10)
+pb = event_probability(3,9)
+pg = event_probability(2,8)
+print ("probability of obtaining white, black and green in that order is: ", (pw * pb * pg))
+cards = 52
+hearts = 13
+clubs = 13
+heart_or_club = event_probability(hearts, cards) + event_probability(clubs, cards)
+print(heart_or_club)
+aces = 4
+kings = 4
+queens = 4
+ace_king_or_queen = event_probability(aces, cards) + event_probability(kings, cards) +
+event_probability(queens, cards)
+print(heart_or_club)
+print(ace_king_or_queen)
+hearts = 13
+aces = 4
+ace_of_hearts = 1
+heart_or_ace = event_probability(hearts, cards) + event_probability(aces, cards) -
+event_probability(ace_of_hearts, cards)
+print(round(heart_or_ace, 1))
+red_cards = 26
+face_cards = 12
+red_face_cards = 6
+red_or_face_cards = event_probability(red_cards, cards) + event_probability(face_cards,cards) - event_probability(red_face_cards, cards)
+print(round(heart_or_ace, 1))
+print(round(red_or_face_cards, 1))
+ns = 6
+na = 1
+pa = na/ns
+print ("probability of not getting 5 is: ", 1-pa)
+
+p5
+import pandas as pd
+import numpy as np
+df = pd.read_csv('student-mat.csv')
+df.head(3)
+len(df)
+df['grade_A'] = np.where (df['G3']*5 >= 80, 1, 0)
+df['high_absenses'] = np.where(df['absences'] >= 10, 1, 0)
+df['count'] = 1
+df = df[['grade_A', 'high_absenses', 'count']]
+df.head()
+final = pd.pivot_table(
+df,
+values='count',
+index=['grade_A'],
+columns=['high_absenses'],
+aggfunc=np.size,
+fill_value=0
+)
+final
+
+p6
+%matplotlib inline
+import matplotlib.pyplot as plt
+from IPython.display import Math, Latex
+from IPython.core.display import Image
+import numpy as np
+import seaborn as sns
+sns.set(color_codes=True)
+from scipy.stats import bernoulli
+data_bern = bernoulli.rvs(size=10000,p=0.6)
+ax= sns.distplot(data_bern,
+kde=False,
+color="skyblue",
+hist_kws={"linewidth": 15,'alpha':1})
+ax.set(xlabel='Bernoulli Distribution', ylabel='Frequency')
+from scipy.stats import binom
+data_binom = binom.rvs(n=10,p=0.8,size=10000)
+ax = sns.distplot(data_binom,
+kde=False,
+color='skyblue',
+hist_kws={"linewidth": 15,'alpha':1})
+ax.set(xlabel='Binomial Distribution', ylabel='Frequency')
+from scipy.stats import poisson
+data_poisson = poisson.rvs(mu=3, size=10000)
+ax = sns.distplot(data_poisson,
+bins=30,
+kde=False,
+color='skyblue',
+hist_kws={"linewidth": 15,'alpha':1})
+ax.set(xlabel='Poisson Distribution', ylabel='Frequency')
+
+p7
+%matplotlib inline
+import matplotlib.pyplot as plt
+from IPython.display import Math, Latex
+from IPython.core.display import Image
+import numpy as np
+import seaborn as sns
+sns.set(color_codes=True)
+from scipy.stats import uniform
+n = 10000
+start = 10
+width = 20
+data_uniform = uniform.rvs(size=n, loc = start, scale=width)
+ax = sns.distplot(data_uniform,
+bins=100,
+kde=True,
+color='skyblue',
+hist_kws={"linewidth": 15,'alpha':1})
+ax.set(xlabel='Uniform Distribution ', ylabel='Frequency')
+data_normal = norm.rvs(size=10000,loc=0,scale=1)
+ax = sns.distplot(data_normal,
+bins=100,
+kde=True,
+color='skyblue',
+hist_kws={"linewidth": 15,'alpha':1})
+ax.set(xlabel='Normal Distribution', ylabel='Frequency')
+from scipy.stats import expon
+data_expon = expon.rvs(scale=1,loc=0,size=1000)
+ax = sns.distplot(data_expon,
+kde=True,
+bins=100,
+color='skyblue',
+hist_kws={"linewidth": 15,'alpha':1})
+ax.set(xlabel='Exponential Distribution', ylabel='Frequency')
+from numpy import random
+x = random.chisquare(df=2, size=(2, 3))
+print(x)
+from numpy import random
+import matplotlib.pyplot as plt
+import seaborn as sns
+sns.distplot(random.chisquare(df=1, size=1000), hist=False)
+plt.show()
+a = 5. 
+s = np.random.weibull(a, 1000)
+import matplotlib.pyplot as plt
+x = np.arange(1,100.)/50.
+def weib(x,n,a):
+return (a / n) * (x / n)**(a - 1) * np.exp(-(x / n)**a)
+count, bins, ignored = plt.hist(np.random.weibull(5.,1000))
+x = np.arange(1,100.)/50.
+scale = count.max()/weib(x, 1., 5.).max()
+plt.plot(x, weib(x, 1., 5.)*scale)
+plt.show()
+
+p8
+import pandas as pd
+df=pd.read_csv('stats.csv')
+df
+mean1=df['Salary'].mean()
+mean1
+sum1=df['Salary'].sum()
+sum1
+max1=df['Salary'].max()
+max1
+min1=df['Salary'].min()
+min1
+count1=df['Salary'].count()
+count1
+median=df['Salary'].median()
+median
+mode1=df['Salary'].mode()
+mode1
+countrywise_sum=df.groupby(['Country'])['Salary'].sum()
+countrywise_sum
+countrywise_count=df.groupby(['Country']).count()
+countrywise_count
+var1=df['Salary'].var()
+var1
+std1=df['Salary'].std()
+std1
+skew1=df.skew(axis=0, skipna=True)
+skew1
+df.describe()
